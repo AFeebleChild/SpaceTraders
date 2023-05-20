@@ -1,13 +1,14 @@
 package lib
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
 )
 
 func (a Agent) Save() error {
-	path := "agents/" + a.Symbol + ".json"
+	path := "agents/" + a.Symbol + "/" + a.Symbol + ".json"
 	fmt.Println("Saving agent:", path)
 	file, err := os.Create(path)
 	if err != nil {
@@ -24,11 +25,12 @@ func (a Agent) Save() error {
 		return fmt.Errorf("cannot write agent to file: %v", err)
 	}
 
-	return err
+	return nil
 }
 
 func LoadAgent(symbol string) (*Agent, error) {
-	file, err := os.Open("agents/" + symbol + ".json")
+	path := "agents/" + symbol + "/" + symbol + ".json"
+	file, err := os.Open(path)
 	if err != nil {
 		return nil, fmt.Errorf("cannot open agent file: %v", err)
 	}
@@ -42,5 +44,25 @@ func LoadAgent(symbol string) (*Agent, error) {
 		return nil, fmt.Errorf("cannot get agent from file: %v", err)
 	}
 
-	return agent, err
+	return agent, nil
+}
+
+func GetAgent(symbol string) (*Agent, error) {
+	client, err := NewClientFromCallsign(symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := HandleResp(client.GetMyAgent(context.Background()))
+	if err != nil {
+		return nil, err
+	}
+
+	agent := &Agent{}
+	err = json.Unmarshal(body, agent)
+	if err != nil {
+		return nil, err
+	}
+
+	return agent, nil
 }

@@ -491,8 +491,6 @@ type Agent struct {
 	// Headquarters The headquarters of the agent.
 	Headquarters string `json:"headquarters"`
 	Symbol       string `json:"symbol"`
-
-	Token string `json:"token"`
 }
 
 // Chart The chart of a system or waypoint, which makes the location visible to other agents.
@@ -1317,7 +1315,7 @@ type RegisterJSONBody struct {
 	Email *string `json:"email,omitempty"`
 
 	// Faction The faction you choose determines your headquarters.
-	Faction interface{} `json:"faction"`
+	Faction *interface{} `json:"faction,omitempty"`
 
 	// Symbol How other agents will see your ships and information.
 	Symbol string `json:"symbol"`
@@ -8062,16 +8060,16 @@ var swaggerSpec = []string{
 	"t9PJWH+TySNF8pcU7zYkaXQyS4b2XMe2LFm1zxZB3Yd3CEdRRvJc8iiac91bBfhw2YdkXOgQuOCTzemq",
 	"Mgfw96KGwYEaYpQ8ba+DAWiEujz8KCIZJwSZlWZNcPRHiTNgZ0aRs4HrT6B4260LedFH1tgaiCqEsu51",
 	"r98buhNn6rhTuPzUVoHxhm3lbUpR0EEG1RKzWpIwwNQdDOQz3qSgElxZwxEEEG3wZ13W8p99s8rlPzqX",
-	"iFu25wh8i9bXs5Pfdq6CaxTUOSuLY3OBOQtdmWXiwPIngqmTlTxaIkj1pUuonRZaxVBViselcelf588F",
-	"2J8/nsIImJAF86Zki6riKKa/uS0FFeevGMU0F3eDOdWLj5ovWmp/4rcEva+coLfFL/3mU/QeeKS1v9wk",
-	"2cs/zdvdZ5YgkTaEdgJ+hYvCcrleNDulmushpjvlpjTu5bc4bOqVrrtUp/rpu3eu3Vafqnnt67EIR+pW",
-	"yRzjZkoe6d6RJRyUbUkgRt+8VDkcoSXIvuqN0t8qZqIjDY7VxRL9m17sb9zydblle0zEW+eXTbEQr7aP",
-	"H7VrL/+sG/bOrSloljc+2Gp6YV+co7dmMP2qPN2Y75ujhn7TgJphHhtyz/L79UkQEv28U2kEWiULMGKB",
-	"fURRpDhOjpLkD+UmHeGCvDxJ6pFflCQhD4yc8DeafAJNiusGp/MF003KsiLvI/IZ/pA2MGG0F9lTwL6I",
-	"5QWGNMYhuUCO+AxsVfcE5SyOqi7kQ3WPVIaz6E6FgWy/EZeYeDcq06E2HNayIhZMatlQJlv0hdKMhtLi",
-	"l5EQZKwqeKqlOIxAz4vvKjnui+4pPddvG+oJGyqXFTpOao+q4T5770jXwjwIjh+c6XxO8Q5VTlzesa6+",
-	"cg7Vqyojr5PbCkZ+8ZIKcr7faF/QfgcUkuyhGSUP3x8Uv8cpvchTHJJCuJ0uKLt8+L7H+5EYP1Cvq/Lh",
-	"9cLUee8QJ9fglK1aws/DZmZF2r3Cck29Vmaj2iI2NbVESWbdUpZo/vLrl/8XAAD///fTBuGt/gAA",
+	"iOsv25MEvkXz69nZbzuXwTUq6pyVxrG5wpyFrsw6cWD6E9HUyUqeLRHk+tI11E5LrWKoKsfj0rj1rxPo",
+	"AuzPH1BhREzIinlTskVVdRTT4dyWg4ozWIximovLwZzsxUfNNy21Q/Fbht5XztDb4ph+8zl6D1zS2mFu",
+	"kuzln+b17jNrkEgjQjsBv8JNYblcL5qeUs31ENOdklMaF/NbPDb1UtddylP99N07124rUNW89vVghCOF",
+	"q2SScTMnj/TvyBoOyrgkEKOvXqokjtAShF/1RilwFTPRoQbHCmOJ/k039jdu+brcsj0o4q3zy6ZgiFfb",
+	"x4/atZd/1i175xYVNOsbH2w1vbAvztFbU5h+VZ5uzPfNUUO/aUDNMI8NuWf6/fokCJl+3qk8Aq2SBVix",
+	"wECiKFIcJ0dJ8odyk45wQV6eJPXIL0qSkAhGTvgbTT6BJsV9g9MJg+kmZVmR9xH5DH9II5iw2ov0KWBg",
+	"xPIGQxrjkFwgR3wGxqp7gnIWR1UX8qG6SCrjWXSnwkK234hLTLwblepQWw5raRELJrVsqJMt+kJpRkNp",
+	"8stICDJWFT3VUh1GoOfFd5Uc90X3lJ7rtw31hA2VyxIdJ7VH1XCfvXeka2EfBM8PznRCp3iHKi8u71iX",
+	"XzmH6lWZkddJbgUjv3hNBTnfb7QvaL8DCkn20IySh+8Pqt/jlF7kKQ5JIfxOF5RdPnzf4/1IjB+o11X9",
+	"8Hpl6rx3iJNr8MpWLeHnYTOzJO1eZbmmXiuzUW0Rm5paoiazbilrNH/59cv/CwAA///k1keLrv4AAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

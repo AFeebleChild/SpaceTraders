@@ -7,6 +7,16 @@ import (
 	"os"
 )
 
+type (
+	NewAgentResp struct {
+		Token    string   `json:"token"`
+		Agent    Agent    `json:"agent"`
+		Ship     Ship     `json:"ship"`
+		Contract Contract `json:"contract"`
+		Faction  Faction  `json:"faction"`
+	}
+)
+
 func (a Agent) Save() error {
 	path := "agents/" + a.Symbol + "/" + a.Symbol + ".json"
 	fmt.Println("Saving agent:", path)
@@ -47,13 +57,28 @@ func LoadAgent(symbol string) (*Agent, error) {
 	return agent, nil
 }
 
-func GetAgent(symbol string) (*Agent, error) {
-	client, err := NewClientFromCallsign(symbol)
+func NewAgent(client *Client, symbol, faction string) (*NewAgentResp, error) {
+	params := RegisterJSONRequestBody{
+		Symbol:  symbol,
+		Faction: &faction,
+	}
+
+	body, err := HandleResp(client.Register(context.Background(), params))
 	if err != nil {
 		return nil, err
 	}
 
-	body, err := HandleResp(client.GetMyAgent(context.Background()))
+	newAgent := &NewAgentResp{}
+	err = json.Unmarshal(body, newAgent)
+	if err != nil {
+		return nil, err
+	}
+
+	return newAgent, nil
+}
+
+func GetAgent(c *Client) (*Agent, error) {
+	body, err := HandleResp(c.GetMyAgent(context.Background()))
 	if err != nil {
 		return nil, err
 	}

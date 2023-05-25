@@ -9,15 +9,10 @@ type (
 	Contracts []Contract
 )
 
-func GetContracts(callsign string) (*Contracts, error) {
-	client, err := NewClientFromCallsign(callsign)
-	if err != nil {
-		return nil, err
-	}
-
+func GetContracts(c *Client) (*Contracts, error) {
 	params := &GetContractsParams{}
 
-	body, err := HandleResp(client.GetContracts(context.Background(), params))
+	body, err := HandleResp(c.GetContracts(context.Background(), params))
 	if err != nil {
 		return nil, err
 	}

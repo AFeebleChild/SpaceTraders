@@ -1315,7 +1315,7 @@ type RegisterJSONBody struct {
 	Email *string `json:"email,omitempty"`
 
 	// Faction The faction you choose determines your headquarters.
-	Faction *interface{} `json:"faction,omitempty"`
+	Faction *string `json:"faction,omitempty"`
 
 	// Symbol How other agents will see your ships and information.
 	Symbol string `json:"symbol"`

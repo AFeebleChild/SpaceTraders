@@ -15,6 +15,10 @@ type Data struct {
 	Data interface{} `json:"data"`
 }
 
+func NewClientBase() (*Client, error) {
+	return NewClient(ApiUrl)
+}
+
 func NewClientFromCallsign(callsign string) (*Client, error) {
 	token, err := LoadToken(callsign)
 	if err != nil {
@@ -41,7 +45,7 @@ func HandleResp(resp *http.Response, err error) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode < 200 || resp.StatusCode >= 400 {
 		JsonPrettyPrint(body)
 		return nil, fmt.Errorf("status code: %d", resp.StatusCode)
 	}

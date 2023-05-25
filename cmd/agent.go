@@ -13,6 +13,7 @@ import (
 var (
 	CallSign string
 	Faction  string
+	Client   *lib.Client
 )
 
 // agentCmd represents the agent command
@@ -34,42 +35,19 @@ to quickly create a Cobra application.`,
 			fmt.Println("CallSign is required")
 			return
 		}
+		var err error
+		Client, err = lib.NewClientFromCallsign(CallSign)
+		if err != nil {
+			panic(err)
+		}
 	},
 }
-
-// var newAgentCmd = &cobra.Command{
-// 	Use:   "new",
-// 	Short: "Create a new agent",
-// 	Run: func(cmd *cobra.Command, args []string) {
-// 		if CallSign == "" {
-// 			fmt.Println("CallSign is required")
-// 			return
-// 		}
-// 		if Faction == "" {
-// 			fmt.Println("Faction is required")
-// 			return
-// 		}
-// 		newAgentData := lib.NewAgent(CallSign, Faction)
-// 		agent := newAgentData.Data.Agent
-// 		agent.Token = newAgentData.Data.Token
-// 		err := agent.Save()
-// 		if err != nil {
-// 			panic(err)
-// 		}
-// 		fmt.Println("Agent created\n\n")
-// 		out, err := json.MarshalIndent(newAgentData, "", "  ")
-// 		if err != nil {
-// 			panic(err)
-// 		}
-// 		fmt.Println(string(out))
-// 	},
-// }
 
 var getAgentCmd = &cobra.Command{
 	Use:   "get-agent",
 	Short: "Get an agent",
 	Run: func(cmd *cobra.Command, args []string) {
-		agent, err := lib.GetAgent(CallSign)
+		agent, err := lib.GetAgent(Client)
 		if err != nil {
 			panic(err)
 		}
@@ -81,11 +59,25 @@ var getAgentCmd = &cobra.Command{
 	},
 }
 
+var getFactionsCmd = &cobra.Command{
+	Use:   "get-factions",
+	Short: "Get all factions",
+	Run: func(cmd *cobra.Command, args []string) {
+		factions, err := lib.GetFactions(Client)
+		if err != nil {
+			panic(err)
+		}
+
+		f, _ := json.Marshal(factions)
+		lib.JsonPrettyPrint(f)
+	},
+}
+
 var getContractsCmd = &cobra.Command{
 	Use:   "get-contracts",
 	Short: "Get all contracts",
 	Run: func(cmd *cobra.Command, args []string) {
-		contracts, err := lib.GetContracts(CallSign)
+		contracts, err := lib.GetContracts(Client)
 		if err != nil {
 			panic(err)
 		}
@@ -125,11 +117,6 @@ var getWaypointsCmd = &cobra.Command{
 	Use:   "get-waypoints",
 	Short: "Get all system waypoints",
 	Run: func(cmd *cobra.Command, args []string) {
-		client, err := lib.NewClientFromCallsign(CallSign)
-		if err != nil {
-			panic(err)
-		}
-
 		agent, err := lib.LoadAgent(CallSign)
 		if err != nil {
 			panic(err)
@@ -137,22 +124,23 @@ var getWaypointsCmd = &cobra.Command{
 		split := strings.Split(agent.Headquarters, "-")
 		system := split[0] + "-" + split[1]
 
-		params := &lib.GetSystemWaypointsParams{}
-
-		body, err := lib.HandleResp(client.GetSystemWaypoints(context.TODO(), system, params))
+		waypoints, err := lib.GetWaypoints(Client, system)
 		if err != nil {
 			panic(err)
 		}
-		lib.JsonPrettyPrint(body)
+
+		w, _ := json.Marshal(waypoints)
+
+		lib.JsonPrettyPrint(w)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(agentCmd)
 
-	// agentCmd.AddCommand(newAgentCmd)
 	agentCmd.AddCommand(getAgentCmd)
 	agentCmd.AddCommand(getContractsCmd)
+	agentCmd.AddCommand(getFactionsCmd)
 	agentCmd.AddCommand(getLocationCmd)
 	agentCmd.AddCommand(getWaypointsCmd)
 

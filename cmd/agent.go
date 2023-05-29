@@ -128,6 +128,10 @@ var getWaypointsCmd = &cobra.Command{
 		if err != nil {
 			panic(err)
 		}
+		err = waypoints.Save(system)
+		if err != nil {
+			panic(err)
+		}
 
 		w, _ := json.Marshal(waypoints)
 

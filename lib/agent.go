@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 )
 
 type (
@@ -18,24 +17,17 @@ type (
 )
 
 func (a Agent) Save() error {
-	path := "agents/" + a.Symbol + "/" + a.Symbol + ".json"
+	path := MakeJsonPath("agents", a.Symbol)
 	fmt.Println("Saving agent:", path)
 
 	return JsonFilePrettyPrint(path, a)
 }
 
 func LoadAgent(symbol string) (*Agent, error) {
-	path := "agents/" + symbol + "/" + symbol + ".json"
-	content, err := JsonReadFile(path)
-	if err != nil {
-		return nil, fmt.Errorf("cannot load agent file: %v", err)
-	}
+	path := MakeJsonPath("agents", symbol)
 	agent := &Agent{}
-	err = json.Unmarshal(content, agent)
-	if err != nil {
-		return nil, fmt.Errorf("cannot unmarshal agent file: %v", err)
-	}
-	return agent, nil
+	err := JsonReadFile(path, agent)
+	return agent, err
 }
 
 func NewAgent(client *Client, symbol, faction string) (*NewAgentResp, error) {

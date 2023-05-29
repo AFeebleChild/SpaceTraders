@@ -19,17 +19,9 @@ func (w Waypoints) Save(system string) error {
 
 func LoadWaypoints(system string) (*Waypoints, error) {
 	path := "systems/" + system + "/waypoints.json"
-	content, err := JsonReadFile(path)
-	if err != nil {
-		return nil, fmt.Errorf("cannot load waypoints file: %v", err)
-	}
 	waypoints := &Waypoints{}
-	err = json.Unmarshal(content, waypoints)
-	if err != nil {
-		return nil, fmt.Errorf("cannot unmarshal waypoints file: %v", err)
-	}
-
-	return waypoints, nil
+	err := JsonReadFile(path, waypoints)
+	return waypoints, err
 }
 
 func GetWaypoints(c *Client, system string) (*Waypoints, error) {

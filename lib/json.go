@@ -8,6 +8,13 @@ import (
 	"strings"
 )
 
+// MakeJsonPath returns the string path for the given type and symbol
+// data is agent/systems/etc
+// symbol is the symbol of the agent/system/etc
+func MakeJsonPath(data, symbol string) string {
+	return data + "/" + symbol + "/" + symbol + ".json"
+}
+
 func JsonPrettyPrint(in []byte) {
 	var out bytes.Buffer
 	// TODO ignoring error, but probably shouldn't
@@ -16,6 +23,7 @@ func JsonPrettyPrint(in []byte) {
 }
 
 func JsonFilePrettyPrint(path string, in interface{}) error {
+	// The path includes the filename, and want to exclude that from the MkdirAll call
 	err := os.MkdirAll(path[:len(path)-len(path[strings.LastIndex(path, "/"):])], 0755)
 	if err != nil {
 		return fmt.Errorf("cannot create directory: %v", err)
@@ -37,18 +45,19 @@ func JsonFilePrettyPrint(path string, in interface{}) error {
 	return nil
 }
 
-func JsonReadFile(path string) ([]byte, error) {
+// JsonReadFile reads a json file into the out interface
+// out needs to be a pointer to the struct that the json file represents
+func JsonReadFile(path string, out interface{}) (error) {
 	file, err := os.Open(path)
 	if err != nil {
-		return nil, fmt.Errorf("cannot open file: %v", err)
+		return fmt.Errorf("cannot open file: %v", err)
 	}
 	defer file.Close()
 
 	decoder := json.NewDecoder(file)
-	var out bytes.Buffer
-	err = decoder.Decode(&out)
+	err = decoder.Decode(out)
 	if err != nil {
-		return nil, fmt.Errorf("cannot decode json: %v", err)
+		return fmt.Errorf("cannot decode json: %v", err)
 	}
-	return out.Bytes(), nil
+	return nil
 }

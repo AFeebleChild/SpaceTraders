@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/afeeblechild/SpaceTraders/lib"
+	"github.com/afeeblechild/SpaceTraders/lib/log"
 	"github.com/spf13/cobra"
 )
 
@@ -38,7 +39,7 @@ to quickly create a Cobra application.`,
 		var err error
 		Client, err = lib.NewClientFromCallsign(CallSign)
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 	},
 }
@@ -49,7 +50,7 @@ var getAgentCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		agent, err := lib.GetAgent(Client)
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 
 		a, _ := json.Marshal(agent)
@@ -65,7 +66,7 @@ var getFactionsCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		factions, err := lib.GetFactions(Client)
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 
 		f, _ := json.Marshal(factions)
@@ -79,7 +80,7 @@ var getContractsCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		contracts, err := lib.GetContracts(Client)
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 
 		c, _ := json.Marshal(contracts)
@@ -93,12 +94,12 @@ var getLocationCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := lib.NewClientFromCallsign(CallSign)
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 
 		agent, err := lib.LoadAgent(CallSign)
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 		split := strings.Split(agent.Headquarters, "-")
 
@@ -107,7 +108,7 @@ var getLocationCmd = &cobra.Command{
 
 		body, err := lib.HandleResp(client.GetWaypoint(context.TODO(), system, waypoint))
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 		lib.JsonPrettyPrint(body)
 	},
@@ -119,18 +120,18 @@ var getWaypointsCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		agent, err := lib.LoadAgent(CallSign)
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 		split := strings.Split(agent.Headquarters, "-")
 		system := split[0] + "-" + split[1]
 
 		waypoints, err := lib.GetWaypoints(Client, system)
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 		err = waypoints.Save(system)
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 
 		w, _ := json.Marshal(waypoints)

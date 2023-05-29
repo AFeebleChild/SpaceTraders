@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/afeeblechild/SpaceTraders/lib"
+	"github.com/afeeblechild/SpaceTraders/lib/log"
 	"github.com/spf13/cobra"
 )
 
@@ -23,15 +24,15 @@ var registerCmd = &cobra.Command{
 		var err error
 		Client, err = lib.NewClientBase()
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 		newAgentData, err := lib.NewAgent(Client, CallSign, Faction)
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 		err = newAgentData.Agent.Save()
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 		token := &lib.Token{
 			Token:  newAgentData.Token,
@@ -39,12 +40,12 @@ var registerCmd = &cobra.Command{
 		}
 		err = token.Save()
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
-		fmt.Println("Agent created\n\n")
+		fmt.Printf("Agent created\n\n\n")
 		out, err := json.MarshalIndent(newAgentData, "", "  ")
 		if err != nil {
-			panic(err)
+			log.Panic(err.Error())
 		}
 		fmt.Println(string(out))
 	},
